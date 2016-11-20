@@ -46,7 +46,8 @@ enum Stimulus
 	TurnOn,
 	TurnOff,
 	SpeedUp,
-	SpeedDown
+	SpeedDown,
+	foobar
 };
 
 enum State
@@ -89,3 +90,6 @@ void stimulate(struct FSM* fsm, enum Stimulus stimulus)
 {
 	printf("The machine has been stimulated%s\n", stimulus);
 }
+
+
+//Estooo no se deberia borrar
