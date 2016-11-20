@@ -41,6 +41,8 @@ transición la máquina fsm debe imprimir por salida estándar:
 Se debe implementar también un main que estimule la máquina. Junto a la implementación de
 este ejercicio se pedirá un diagrama de estados con las transiciones de la máquina de estados.*/
 
+#include <stdio.h>
+
 enum Stimulus
 {
 	TurnOn,
@@ -58,10 +60,13 @@ enum State
 	Error
 };
 
+char * STATE_STRINGS [5]= {"Off", "Stopped", "Walking","Running","Error"} ;
+char * STIMULUS_STRINGS [4]= {"TurnOn", "TurnOff", "SpeedUp","SpeedDown"} ;
+
 struct FSM
 {
-	State OldState,
-	State CurrentState
+	enum State currentState;
+	enum State oldState;
 };
 
 void stimulate(struct FSM*, enum Stimulus);
@@ -69,23 +74,72 @@ void stimulate(struct FSM*, enum Stimulus);
 int main ()
 {
 	struct FSM fsm;
+	fsm.currentState = Off;
+	fsm.oldState = Off;
+
 
 	// Correct processig of the FSM
-	stimulate(fsm, Stimulus.TurnOn);
-	stimulate(fsm, Stimulus.SpeedUp);
-	stimulate(fsm, Stimulus.SpeedUp);
-	stimulate(fsm, Stimulus.SpeedDown);
-	stimulate(fsm, Stimulus.SpeedDown);
-	stimulate(fsm, Stimulus.TurnOff);
+	printf("------------- Correct processig -------------\n");
+	stimulate(&fsm, TurnOn);
+	stimulate(&fsm, SpeedUp);
+	stimulate(&fsm, SpeedUp);
+	stimulate(&fsm, SpeedDown);
+	stimulate(&fsm, SpeedDown);
+	stimulate(&fsm, TurnOff);
 
+	printf("----------------- Bad processig ----------------\n");
 	// Bad processig of the FSM
-	stimulate(fsm, Stimulus.TurnOn);
-	stimulate(fsm, Stimulus.SpeedDown);
-	stimulate(fsm, Stimulus.TurnOn);
-	stimulate(fsm, Stimulus.TurnOff);
+	stimulate(&fsm, TurnOn);
+	stimulate(&fsm, SpeedDown);
+	stimulate(&fsm, TurnOn);
+	stimulate(&fsm, TurnOff);
 }
 
 void stimulate(struct FSM* fsm, enum Stimulus stimulus)
 {
-	printf("The machine has been stimulated%s\n", stimulus);
+	if (fsm->currentState == Off && stimulus == TurnOn)
+	{ 	
+		fsm->oldState = fsm->currentState;
+		fsm->currentState = Stopped;
+		printf("[%s] ­­­­ <%s> ­­­­­> [%s]\n",STATE_STRINGS[fsm->oldState], STIMULUS_STRINGS[stimulus] ,STATE_STRINGS[fsm->currentState]);
+	}
+	else if (fsm->currentState == Stopped && stimulus == SpeedUp)
+	{ 	
+		fsm->oldState = fsm->currentState;
+		fsm->currentState = Walking;
+		printf("[%s] ­­­­ <%s> ­­­­­> [%s]\n",STATE_STRINGS[fsm->oldState], STIMULUS_STRINGS[stimulus] ,STATE_STRINGS[fsm->currentState]);
+	}
+	else if (fsm->currentState == Walking)
+	{ 	
+		if(stimulus == SpeedUp)
+		{
+			fsm->oldState = fsm->currentState;
+			fsm->currentState = Running;
+			printf("[%s] ­­­­ <%s> ­­­­­> [%s]\n",STATE_STRINGS[fsm->oldState], STIMULUS_STRINGS[stimulus] ,STATE_STRINGS[fsm->currentState]);	
+		}
+		if (stimulus == SpeedDown)
+		{
+			fsm->oldState = fsm->currentState;
+			fsm->currentState = Stopped;
+			printf("[%s] ­­­­ <%s> ­­­­­> [%s]\n",STATE_STRINGS[fsm->oldState], STIMULUS_STRINGS[stimulus] ,STATE_STRINGS[fsm->currentState]);
+		}
+	}
+	else if (fsm->currentState == Running && stimulus == SpeedDown)
+	{ 	
+		fsm->oldState = fsm->currentState;
+		fsm->currentState = Walking;
+		printf("[%s] ­­­­ <%s> ­­­­­> [%s]\n",STATE_STRINGS[fsm->oldState], STIMULUS_STRINGS[stimulus] ,STATE_STRINGS[fsm->currentState]);
+	}
+	else if (stimulus == TurnOff)
+	{ 	
+		fsm->oldState = fsm->currentState;
+		fsm->currentState = Off;
+		printf("[%s] ­­­­ <%s> ­­­­­> [%s]\n",STATE_STRINGS[fsm->oldState], STIMULUS_STRINGS[stimulus] ,STATE_STRINGS[fsm->currentState]);
+	}
+	else
+	{
+		fsm->oldState = fsm->currentState;
+		fsm->currentState = Error;
+		printf("[%s] ­­­­ <%s> ­­­­­> [%s]\n",STATE_STRINGS[fsm->oldState], STIMULUS_STRINGS[stimulus] ,STATE_STRINGS[fsm->currentState]);
+	} 	
 }
