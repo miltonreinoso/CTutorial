@@ -48,8 +48,7 @@ enum Stimulus
 	TurnOn,
 	TurnOff,
 	SpeedUp,
-	SpeedDown,
-	foobar
+	SpeedDown
 };
 
 enum State
@@ -144,6 +143,3 @@ void stimulate(struct FSM* fsm, enum Stimulus stimulus)
 		printf("[%s] ­­­­ <%s> ­­­­­> [%s]\n",STATE_STRINGS[fsm->oldState], STIMULUS_STRINGS[stimulus] ,STATE_STRINGS[fsm->currentState]);
 	} 	
 }
-
-
-//Estooo no se deberia borrar
