@@ -2,9 +2,32 @@
 sobre el mismo parámetro.
 
 NT: Resolution oriented to pointers.*/
+#include <cstdio>
+#include <iostream>
+#include <string>
+#include <cassert>
 
-int i = 2;
+using namespace std;
 
-increment(i);
+void increment(int*&);
 
-printf("%d", i); // Print 3
+//int* globalPointer;
+//size_t addresGlobal;
+
+int main()
+{
+	int i = 2;
+//	globalPointer = &i;
+//	cout<<"First value Addres In function: " << &globalPointer << " and it's value: " << *globalPointer << endl;
+    increment(i);	
+  //  cout<<"Value Addres In Main: "<<&i<<endl;
+	printf("%d\n", i); // Print 3
+}
+
+void increment(int*& value)
+{
+  //  *globalPointer = value++;
+    *value++;
+    //cout<<"Second value Addres In function: " << &globalPointer << " and it's value: " << *globalPointer << endl;
+}
+
